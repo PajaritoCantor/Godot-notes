@@ -1,16 +1,44 @@
-[gd_scene load_steps=3 format=3 uid="uid://k7muf3uhmmg7"]
+[gd_scene load_steps=8 format=3 uid="uid://k7muf3uhmmg7"]
 
 [ext_resource type="Script" path="res://esqueleto.gd" id="1_4oagg"]
 
-[sub_resource type="BoxMesh" id="BoxMesh_86rrp"]
+[sub_resource type="SphereMesh" id="SphereMesh_qq2mu"]
+
+[sub_resource type="CylinderMesh" id="CylinderMesh_8g5ep"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_66mnd"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_isljp"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_mprxl"]
+
+[sub_resource type="CapsuleMesh" id="CapsuleMesh_2n4yy"]
 
 [node name="Humano" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 1.48205, 0, 0.66289)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.674351, 2.85859, 0.0439326)
 
 [node name="Esqueleto" type="Skeleton3D" parent="."]
 script = ExtResource("1_4oagg")
 
-[node name="MeshInstance3D" type="MeshInstance3D" parent="Esqueleto"]
-transform = Transform3D(0.299989, 0, 0.00261796, 0, 0.3, 0, -0.00261796, 0, 0.299989, 1.482, 2, 0.663)
-top_level = true
-mesh = SubResource("BoxMesh_86rrp")
+[node name="Cabeza" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0222712, 1.52736, -0.000622749)
+mesh = SubResource("SphereMesh_qq2mu")
+
+[node name="Torso" type="MeshInstance3D" parent="."]
+mesh = SubResource("CylinderMesh_8g5ep")
+
+[node name="Brazo Izquierdo" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.01472)
+mesh = SubResource("CapsuleMesh_66mnd")
+
+[node name="Brazo Derecho" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0813718, 0.0129108, -0.994998)
+mesh = SubResource("CapsuleMesh_isljp")
+
+[node name="Pierna Izquierda" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.262311, -1.96867, 0.52039)
+mesh = SubResource("CapsuleMesh_mprxl")
+
+[node name="Pierna Derecha" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.040833, -1.9982, -0.634337)
+mesh = SubResource("CapsuleMesh_2n4yy")

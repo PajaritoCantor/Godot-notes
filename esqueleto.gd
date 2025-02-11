@@ -1,31 +1,79 @@
 extends Skeleton3D
 
-@onready var skeleton = $Skeleton3D
-@onready var mesh = $MeshInstance3D
+# Variables para almacenar las instancias de mallas de cada parte del cuerpo.
+var mesh_head: MeshInstance3D
+var mesh_torso: MeshInstance3D
+var mesh_left_leg: MeshInstance3D
+var mesh_right_leg: MeshInstance3D
+var mesh_left_arm: MeshInstance3D
+var mesh_right_arm: MeshInstance3D
 
+# Esta función se ejecuta al iniciar el script.
 func _ready():
-	print("Inicio del script")  # 👈 Esto nos dice si el script se ejecuta
-	
-	var bone_idx = add_bone("Hueso raíz")
-	set_bone_rest(bone_idx, Transform3D().translated(Vector3(0, 0, 0)))
+	print("Inicio del script")
 
-#Crear un segundo hueso como hijo del primero
-	var bone2_idx = add_bone("Hueso_Cabeza")
-	set_bone_parent(bone2_idx, bone_idx) #Hueso_Cabeza será hijo de Hueso_Raiz
-	set_bone_rest(bone2_idx, Transform3D().translated(Vector3(0, 1, 0))) # Posicionamos arriba
+	# Buscar los MeshInstance3D en el nodo padre "Humano".
+	var humano = get_parent()  # Obtiene el nodo padre
+	if humano == null:
+		print("ERROR: No se encontró el nodo padre 'Humano'.")  # Error si no encuentra el nodo
+		return
 
-#Imprimir la lista de huesos en la consola
-	for i in get_bone_count():
-		print("Hueso", i, "; ", get_bone_name(i))
+	# Obtiene las mallas de cada parte del cuerpo desde el nodo padre.
+	mesh_head = humano.get_node_or_null("Cabeza")
+	mesh_torso = humano.get_node_or_null("Torso")
+	mesh_left_leg = humano.get_node_or_null("Pierna Izquierda")
+	mesh_right_leg = humano.get_node_or_null("Pierna Derecha")
+	mesh_left_arm = humano.get_node_or_null("Brazo Izquierdo")
+	mesh_right_arm = humano.get_node_or_null("Brazo Derecho")
 
-	var bone_transform = get_bone_global_pose(bone_idx)
-	mesh.global_transform.origin = bone_transform.origin
-	
-# Ajustar la escala si deseo que el cubo se vea como un hueso
-	mesh.scale =Vector3(0.3, 1.0, 0.3)
+	# Verifica si se encontraron todas las mallas.
+	if mesh_head == null or mesh_torso == null or mesh_left_leg == null or mesh_right_leg == null or mesh_left_arm == null or mesh_right_arm == null:
+		print("ERROR: Uno o más nodos MeshInstance3D no fueron encontrados en 'Humano'. Verifica los nombres en el editor.")
+		return  # Detiene la ejecución si hay error
 
-	mesh.global_transform.basis = bone_transform.basis
+	# Crear huesos para las diferentes partes del cuerpo.
+	var bone_idx_root = add_bone("Hueso_Raíz")  # Crea el hueso raíz
+	set_bone_rest(bone_idx_root, Transform3D())  # Configura la transformación del hueso raíz.
 
-	var bone2_transform = get_bone_global_pose(bone_idx)
-	mesh.global_transform.origin = bone2_transform.origin
-	mesh.global_transform.basis = bone2_transform.basis
+	# Crear hueso para la cabeza y asignarle la posición.
+	var bone_idx_head = add_bone("Hueso_Cabeza")
+	set_bone_parent(bone_idx_head, bone_idx_root)  # El hueso cabeza tiene como padre al hueso raíz.
+	set_bone_rest(bone_idx_head, Transform3D().translated(Vector3(0, 2, 0)))  # Traslada la cabeza.
+
+	# Crear hueso para el brazo izquierdo y asignarle la posición.
+	var bone_idx_left_arm = add_bone("Hueso_Brazo_Izquierdo")
+	set_bone_parent(bone_idx_left_arm, bone_idx_root)  # El brazo izquierdo depende del hueso raíz.
+	set_bone_rest(bone_idx_left_arm, Transform3D().translated(Vector3(-1, 1, 0)))  # Traslada el brazo izquierdo.
+
+	# Crear hueso para el brazo derecho y asignarle la posición.
+	var bone_idx_right_arm = add_bone("Hueso_Brazo_Derecho")
+	set_bone_parent(bone_idx_right_arm, bone_idx_root)  # El brazo derecho depende del hueso raíz.
+	set_bone_rest(bone_idx_right_arm, Transform3D().translated(Vector3(1, 1, 0)))  # Traslada el brazo derecho.
+
+	# Crear hueso para la pierna izquierda y asignarle la posición.
+	var bone_idx_left_leg = add_bone("Hueso_Pierna_Izquierda")
+	set_bone_parent(bone_idx_left_leg, bone_idx_root)  # La pierna izquierda depende del hueso raíz.
+	set_bone_rest(bone_idx_left_leg, Transform3D().translated(Vector3(-0.5, -1, 0)))  # Traslada la pierna izquierda.
+
+	# Crear hueso para la pierna derecha y asignarle la posición.
+	var bone_idx_right_leg = add_bone("Hueso_Pierna_Derecha")
+	set_bone_parent(bone_idx_right_leg, bone_idx_root)  # La pierna derecha depende del hueso raíz.
+	set_bone_rest(bone_idx_right_leg, Transform3D().translated(Vector3(0.5, -1, 0)))  # Traslada la pierna derecha.
+
+	# Imprimir los nombres de los huesos creados para verificar.
+	print("Huesos creados:")
+	for i in get_bone_count():  # Recorre todos los huesos y los imprime.
+		print("Hueso", i, ": ", get_bone_name(i))
+	# Asignar transformaciones de huesos a las mallas.
+	apply_bone_transform(mesh_head, bone_idx_head)
+	apply_bone_transform(mesh_torso, bone_idx_root)
+	apply_bone_transform(mesh_left_leg, bone_idx_left_leg)
+	apply_bone_transform(mesh_right_leg, bone_idx_right_leg)
+	apply_bone_transform(mesh_left_arm, bone_idx_left_arm)
+	apply_bone_transform(mesh_right_arm, bone_idx_right_arm)
+
+# Función auxiliar para asignar transformaciones de huesos a las mallas.
+func apply_bone_transform(mesh: MeshInstance3D, bone_idx: int):
+	var bone_transform = get_bone_global_pose(bone_idx)  # Obtiene la transformación global del hueso.
+	mesh.transform.origin = bone_transform.origin  # Aplica la posición del hueso a la malla.
+	mesh.transform.basis = bone_transform.basis  # Aplica la rotación y escala del hueso a la malla.
