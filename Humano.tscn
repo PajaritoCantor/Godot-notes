@@ -15,30 +15,35 @@
 [sub_resource type="CapsuleMesh" id="CapsuleMesh_2n4yy"]
 
 [node name="Humano" type="Node3D"]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.674351, 2.85859, 0.0439326)
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.674351, 2.85859, -1.95607)
 
 [node name="Esqueleto" type="Skeleton3D" parent="."]
 script = ExtResource("1_4oagg")
 
-[node name="Cabeza" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0222712, 1.52736, -0.000622749)
+[node name="Head" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0222712, 1.52736, 1.7167)
 mesh = SubResource("SphereMesh_qq2mu")
 
 [node name="Torso" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.71732)
 mesh = SubResource("CylinderMesh_8g5ep")
 
-[node name="Brazo Izquierdo" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1.01472)
+[node name="LeftLeg" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 2.73204)
 mesh = SubResource("CapsuleMesh_66mnd")
 
-[node name="Brazo Derecho" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0813718, 0.0129108, -0.994998)
+[node name="RightLeg" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.0813718, 0.0129108, 0.722322)
 mesh = SubResource("CapsuleMesh_isljp")
 
-[node name="Pierna Izquierda" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.262311, -1.96867, 0.52039)
+[node name="LeftArm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.054143, -2.06981, 2.37388)
 mesh = SubResource("CapsuleMesh_mprxl")
 
-[node name="Pierna Derecha" type="MeshInstance3D" parent="."]
-transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, 0.040833, -1.9982, -0.634337)
+[node name="RightArm" type="MeshInstance3D" parent="."]
+transform = Transform3D(1, 0, 0, 0, 1, 0, 0, 0, 1, -0.218991, -1.9982, 1.10868)
 mesh = SubResource("CapsuleMesh_2n4yy")
+
+[node name="Camera3D" type="Camera3D" parent="."]
+transform = Transform3D(0.0185338, -0.021334, -0.999601, 0.191287, 0.98138, -0.0173984, 0.981359, -0.190888, 0.0222697, -12.8027, 1.23734, 1.69472)
+fov = 108.726
